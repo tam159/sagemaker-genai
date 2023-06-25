@@ -31,7 +31,7 @@ Resources:
     Type: AWS::SageMaker::CodeRepository
     Properties:
       GitConfig:
-          RepositoryUrl: https://github.com/aws-samples/amazon-sagemaker-genai-datamesh.git
+          RepositoryUrl: https://github.com/tam159/sagemaker-genai.git
   NotebookInstance:
     Type: AWS::SageMaker::NotebookInstance
     Properties:
@@ -85,19 +85,19 @@ Resources:
     Type: "AWS::SageMaker::Endpoint"
     Properties:
       EndpointName: !Sub
-      - 'aws-genai-mda-blog-flan-t5-xxl-endpoint-${RandomGUID}'
+      - 'aws-genai-mda-blog-flan-t5-xl-endpoint-${RandomGUID}'
       - { RandomGUID: !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref AWS::StackId ]]]] }
       EndpointConfigName: !GetAtt LLMEndpointConfig.EndpointConfigName
   LLMEndpointConfig:
     Type: "AWS::SageMaker::EndpointConfig"
     Properties:
       EndpointConfigName: !Sub
-      - 'aws-genai-mda-blog-flan-t5-xxl-endpoint-${RandomGUID}'
+      - 'aws-genai-mda-blog-flan-t5-xl-endpoint-${RandomGUID}'
       - { RandomGUID: !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref AWS::StackId ]]]] }
       ProductionVariants:
         - InitialInstanceCount: 1
           InitialVariantWeight: 1.0
-          InstanceType: "ml.m5d.xlarge"
+          InstanceType: "ml.m5d.2xlarge"
           ModelName: !GetAtt LLMModel.ModelName
           VariantName: !GetAtt LLMModel.ModelName
     Metadata:
@@ -109,10 +109,10 @@ Resources:
     Type: "AWS::SageMaker::Model"
     Properties:
       ModelName: !Sub
-      - 'aws-genai-mda-blog-flan-t5-xxl-model-${RandomGUID}'
+      - 'aws-genai-mda-blog-flan-t5-xl-model-${RandomGUID}'
       - { RandomGUID: !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref AWS::StackId ]]]] }
       PrimaryContainer:
-        ModelDataUrl: !Sub "s3://jumpstart-cache-prod-${AWS::Region}/huggingface-infer/prepack/v1.0.1/infer-prepack-huggingface-text2text-flan-t5-xxl.tar.gz"
+        ModelDataUrl: !Sub "s3://jumpstart-cache-prod-${AWS::Region}/huggingface-infer/prepack/v1.0.1/infer-prepack-huggingface-text2text-flan-t5-xl.tar.gz"
         Image: !Sub "763104351884.dkr.ecr.${AWS::Region}.amazonaws.com/pytorch-inference:1.12.0-gpu-py38"
         Environment: {"TS_DEFAULT_WORKERS_PER_MODEL": "1"}
         Mode: "SingleModel"
@@ -193,7 +193,7 @@ Resources:
         S3Targets:
           # Public S3 bucket with the flights data
           - Path: !Join ["", ["s3://", !Ref "DataBucketName", "/covid-dataset/"]]
-      TablePrefix: !Ref CFNTablePrefixName
+#      TablePrefix: !Ref CFNTablePrefixName
       SchemaChangePolicy:
         UpdateBehavior: "UPDATE_IN_DATABASE"
         DeleteBehavior: "LOG"
