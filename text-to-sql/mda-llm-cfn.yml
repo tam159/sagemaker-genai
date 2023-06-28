@@ -97,7 +97,7 @@ Resources:
       ProductionVariants:
         - InitialInstanceCount: 1
           InitialVariantWeight: 1.0
-          InstanceType: "ml.m5d.12xlarge"
+          InstanceType: "ml.g5.12xlarge"
           ModelName: !GetAtt LLMModel.ModelName
           VariantName: !GetAtt LLMModel.ModelName
     Metadata:
@@ -112,7 +112,7 @@ Resources:
       - 'aws-genai-mda-blog-flan-t5-xxl-model-${RandomGUID}'
       - { RandomGUID: !Select [0, !Split ["-", !Select [2, !Split ["/", !Ref AWS::StackId ]]]] }
       PrimaryContainer:
-        ModelDataUrl: !Sub "s3://jumpstart-cache-prod-${AWS::Region}/huggingface-infer/prepack/v1.0.1/infer-prepack-huggingface-text2text-flan-t5-xxl-bnb-int8.tar.gz"
+        ModelDataUrl: !Sub "s3://jumpstart-cache-prod-${AWS::Region}/huggingface-infer/prepack/v1.0.1/infer-prepack-huggingface-text2text-flan-t5-xxl.tar.gz"
         Image: !Sub "763104351884.dkr.ecr.${AWS::Region}.amazonaws.com/pytorch-inference:1.12.0-gpu-py38"
         Environment: {"TS_DEFAULT_WORKERS_PER_MODEL": "1"}
         Mode: "SingleModel"
